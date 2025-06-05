@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: conectavagas
+      POSTGRES_DB: conectavagas
+    ports:
+      - "5436:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
