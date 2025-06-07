@@ -16,6 +16,7 @@ import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
 import br.com.ifpe.conecta_vagas.modelo.candidato.CandidatoService;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,14 +49,14 @@ public class CandidatoController {
 
     //Save
     @PostMapping
-    public ResponseEntity<Candidato> save(@RequestBody CandidatoRequest request) {
+    public ResponseEntity<Candidato> save(@RequestBody @Valid CandidatoRequest request) {
         Candidato candidato = this.candidatoService.save(request.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
 
     //Update
     @PutMapping("/{id}")
-    public ResponseEntity<Candidato> update(@PathVariable("id") Long id, @RequestBody CandidatoRequest request){
+    public ResponseEntity<Candidato> update(@PathVariable("id") Long id, @RequestBody @Valid CandidatoRequest request){
         Candidato candidato = this.candidatoService.update(id, request.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
