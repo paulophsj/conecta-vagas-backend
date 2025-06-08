@@ -33,35 +33,26 @@ public class CandidatoController {
     @Autowired
     private CandidatoService candidatoService;
 
-    //FindAll
     @GetMapping
     public ResponseEntity<List<Candidato>> findAll() {
         List<Candidato> candidatos = this.candidatoService.findAll();
         return new ResponseEntity<List<Candidato>>(candidatos, HttpStatus.OK);
     }
-
-    //FindOne
     @GetMapping("/{id}")
     public ResponseEntity<Candidato> findOne(@PathVariable("id") Long id) {
         Candidato candidato = this.candidatoService.findOne(id);
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
-
-    //Save
     @PostMapping
     public ResponseEntity<Candidato> save(@RequestBody @Valid CandidatoRequest request) {
         Candidato candidato = this.candidatoService.save(request.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
-
-    //Update
     @PutMapping("/{id}")
     public ResponseEntity<Candidato> update(@PathVariable("id") Long id, @RequestBody @Valid CandidatoRequest request){
         Candidato candidato = this.candidatoService.update(id, request.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
-
-    //Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         this.candidatoService.delete(id);
@@ -75,9 +66,32 @@ public class CandidatoController {
         EnderecoCandidato enderecoCandidato = this.candidatoService.saveEndereco(id,request.build());
         return new ResponseEntity<EnderecoCandidato>(enderecoCandidato, HttpStatus.OK);
     }
+    @PutMapping("/endereco/{id}")
+    public ResponseEntity<EnderecoCandidato> updateEndereco(@PathVariable("id") Long id, @RequestBody EnderecoCandidatoRequest request){
+        EnderecoCandidato enderecoCandidato = this.candidatoService.updateEndereco(id,request.build());
+        return new ResponseEntity<EnderecoCandidato>(enderecoCandidato, HttpStatus.OK);
+    }
+    @DeleteMapping("/endereco/{id}")
+    public ResponseEntity<Void> deleteEndereco(@PathVariable("id") Long id){
+        this.candidatoService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+    /*
+     * Controller > Formacao_Candidato
+     */
     @PostMapping("/formacao/{id}")
     public ResponseEntity<FormacaoAcademica> saveFormacao(@PathVariable("id") Long id, @RequestBody FormacaoAcademicaRequest request){
         FormacaoAcademica formacaoAcademica = this.candidatoService.saveFormacao(id,request.build());
-        return new ResponseEntity<>(formacaoAcademica, HttpStatus.OK);
+        return new ResponseEntity<FormacaoAcademica>(formacaoAcademica, HttpStatus.OK);
+    }
+    @PutMapping("/formacao/{id}")
+    public ResponseEntity<FormacaoAcademica> updateFormacao(@PathVariable("id") Long id, @RequestBody FormacaoAcademicaRequest request){
+        FormacaoAcademica formacaoAcademica = this.candidatoService.updateFormacao(id,request.build());
+        return new ResponseEntity<FormacaoAcademica>(formacaoAcademica, HttpStatus.OK);
+    }
+    @DeleteMapping("/formacao/{id}")
+    public ResponseEntity<Void> deleteFormacao(@PathVariable("id") Long id){
+        this.candidatoService.deleteFormacao(id);
+        return ResponseEntity.ok().build();
     }
 }
