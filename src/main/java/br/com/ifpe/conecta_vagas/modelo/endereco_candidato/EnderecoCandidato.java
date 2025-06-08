@@ -30,7 +30,7 @@ public class EnderecoCandidato extends EntidadeAuditavel {
     private Candidato candidato;
 
     @Column
-    private int enderecoNumero;
+    private Integer enderecoNumero;
 
     @Column
     private String enderecoRua;

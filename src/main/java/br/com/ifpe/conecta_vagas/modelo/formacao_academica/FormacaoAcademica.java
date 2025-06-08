@@ -1,7 +1,5 @@
 package br.com.ifpe.conecta_vagas.modelo.formacao_academica;
 
-import java.time.LocalDate;
-
 import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,5 +42,5 @@ public class FormacaoAcademica extends EntidadeAuditavel{
     private String instituicao;
 
     @Column
-    private LocalDate anoConclusao;
+    private Integer anoConclusao;
 }
