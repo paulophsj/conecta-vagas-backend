@@ -1,7 +1,6 @@
 package br.com.ifpe.conecta_vagas.api.endereco_candidato;
 
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,27 +13,29 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class EnderecoCandidatoRequest {
-    private Integer enderecoNumero;
+    private String enderecoCep;
 
-    @NotBlank(message = "O campo 'Endereco Rua' é obrigatório")
     private String enderecoRua;
 
-    @NotBlank(message = "O campo 'Endereco Bairro' é obrigatório")
+    private Integer enderecoNumero;
+
+    private String enderecoComplemento;
+
     private String enderecoBairro;
 
-    @NotBlank(message = "O campo 'Endereco Cidade' é obrigatório")
     private String enderecoCidade;
-
-    @NotBlank(message = "O campo 'Endereco Estado' é obrigatório")
+    
     private String enderecoEstado;
 
     public EnderecoCandidato build(){
         return EnderecoCandidato.builder()
             .enderecoBairro(enderecoBairro)
+            .enderecoCep(enderecoCep)
             .enderecoCidade(enderecoCidade)
+            .enderecoComplemento(enderecoComplemento)
             .enderecoEstado(enderecoEstado)
-            .enderecoRua(enderecoRua)
             .enderecoNumero(enderecoNumero)
+            .enderecoRua(enderecoRua)
             .build();
             
     }

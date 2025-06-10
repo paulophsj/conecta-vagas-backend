@@ -34,7 +34,7 @@ public class Candidato extends EntidadeAuditavel {
     @OneToMany(mappedBy = "candidato", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<EnderecoCandidato> enderecos;
 
-    @Column(unique = true, nullable = false, length = 11)
+    @Column(unique = true, nullable = false, length = 14)
     private String cpf;
 
     @Column(nullable = false)

@@ -4,5 +4,8 @@ public enum NivelAcademico {
     MEDIO,
     TECNICO,
     TECNOLOGO,
-    SUPERIOR
+    GRADUACAO,
+    POS_GRADUACAO,
+    MESTRADO,
+    DOUTORADO,
 }

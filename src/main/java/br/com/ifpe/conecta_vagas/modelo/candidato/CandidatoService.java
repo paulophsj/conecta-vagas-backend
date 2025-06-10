@@ -68,6 +68,8 @@ public class CandidatoService {
         endereco.setEnderecoCidade(novoEnderecoCandidato.getEnderecoCidade());
         endereco.setEnderecoEstado(novoEnderecoCandidato.getEnderecoEstado());
         endereco.setEnderecoNumero(novoEnderecoCandidato.getEnderecoNumero());
+        endereco.setEnderecoComplemento(novoEnderecoCandidato.getEnderecoComplemento());
+        endereco.setEnderecoCep(novoEnderecoCandidato.getEnderecoCep());
         endereco.setEnderecoRua(novoEnderecoCandidato.getEnderecoRua());
 
         return this.enderecoCandidatoRepository.save(endereco);
