@@ -52,7 +52,10 @@ public class Candidato extends EntidadeAuditavel {
     @Column(length = 500)
     private String resumoProfissional;
 
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(unique = true, nullable = true, length = 20)
     private String numeroTelefone;
+
+    @Column(nullable = false, length = 15)
+    private String senha;
 
 }

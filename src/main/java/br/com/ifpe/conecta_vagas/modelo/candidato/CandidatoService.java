@@ -43,6 +43,7 @@ public class CandidatoService {
         antigoCandidato.setPretensaoSalarial(novoCandidato.getPretensaoSalarial());
         antigoCandidato.setResumoProfissional(novoCandidato.getResumoProfissional());
         antigoCandidato.setNumeroTelefone(novoCandidato.getNumeroTelefone());
+        antigoCandidato.setSenha(novoCandidato.getSenha());
 
         return this.candidatoRepository.save(novoCandidato);
     }
