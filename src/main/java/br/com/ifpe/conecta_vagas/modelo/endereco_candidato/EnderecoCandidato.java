@@ -47,6 +47,6 @@ public class EnderecoCandidato extends EntidadeAuditavel {
     @Column
     private String enderecoCidade;
     
-    @Column
+    @Column(length = 2)
     private String enderecoEstado;
 }

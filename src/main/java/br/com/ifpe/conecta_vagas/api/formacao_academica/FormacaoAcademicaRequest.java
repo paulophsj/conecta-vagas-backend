@@ -1,7 +1,7 @@
 package br.com.ifpe.conecta_vagas.api.formacao_academica;
 
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
-import br.com.ifpe.conecta_vagas.util.enums.NivelAcademico;
+import br.com.ifpe.conecta_vagas.util.enums.formacao_academica.NivelAcademico;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

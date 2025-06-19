@@ -50,6 +50,9 @@ public class CandidatoRequest {
     @Size(min = 6, max = 15, message = "A senha deve ter entre {min} e {max} caracteres.")
     private String senha;
 
+    @NotBlank(message = "O campo email não pode ser 'null' ou vazio.")
+    private String email;
+
     public Candidato build(){
         return Candidato.builder()
             .cpf(cpf)
@@ -60,6 +63,7 @@ public class CandidatoRequest {
             .resumoProfissional(resumoProfissional)
             .numeroTelefone(numeroTelefone)
             .senha(senha)
+            .email(email)
             .build();
     }
 }

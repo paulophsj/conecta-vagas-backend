@@ -4,9 +4,9 @@ import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.ifpe.conecta_vagas.util.enums.NivelAcademico;
 import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
+import br.com.ifpe.conecta_vagas.util.enums.formacao_academica.NivelAcademico;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -41,6 +41,6 @@ public class FormacaoAcademica extends EntidadeAuditavel{
     @Column
     private String instituicao;
 
-    @Column
+    @Column(length = 4)
     private Integer anoConclusao;
 }

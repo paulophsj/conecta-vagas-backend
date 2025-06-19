@@ -58,4 +58,6 @@ public class Candidato extends EntidadeAuditavel {
     @Column(nullable = false, length = 15)
     private String senha;
 
+    @Column(unique = true, nullable = false, length = 100)
+    private String email;
 }
