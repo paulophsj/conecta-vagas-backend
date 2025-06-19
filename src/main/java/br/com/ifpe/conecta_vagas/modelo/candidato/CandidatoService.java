@@ -10,6 +10,7 @@ import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidatoRepository;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademicaRepository;
+import br.com.ifpe.conecta_vagas.util.exceptions.CandidatoException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -29,11 +30,19 @@ public class CandidatoService {
     };
     @Transactional
     public Candidato save(Candidato candidato) {
+        if(candidato.getNome().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "nome");
+
+        }
         candidato.setHabilitado(Boolean.TRUE);
         return candidatoRepository.save(candidato);
     };
     @Transactional
     public Candidato update(Long id, Candidato novoCandidato) {
+        if(novoCandidato.getNome().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "nome");
+
+        }
         Candidato antigoCandidato = this.findOne(id);
 
         antigoCandidato.setCargoPretendido(novoCandidato.getCargoPretendido());
@@ -63,6 +72,22 @@ public class CandidatoService {
     }
     @Transactional
     public EnderecoCandidato updateEndereco(Long id, EnderecoCandidato novoEnderecoCandidato) {
+        if(!novoEnderecoCandidato.getEnderecoCep().matches("^\\d{5}-\\d{3}$")){
+            throw new CandidatoException(CandidatoException.FORMATO_CEP);
+        }
+        if(novoEnderecoCandidato.getEnderecoBairro().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "bairro");
+        }
+        if(novoEnderecoCandidato.getEnderecoCidade().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "cidade");
+        }
+        if(novoEnderecoCandidato.getEnderecoEstado().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "estado");
+        }
+        if(novoEnderecoCandidato.getEnderecoRua().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "logradouro");
+        }
+
         EnderecoCandidato endereco = this.enderecoCandidatoRepository.findById(id).get();
 
         endereco.setEnderecoBairro(novoEnderecoCandidato.getEnderecoBairro());
@@ -77,6 +102,22 @@ public class CandidatoService {
     }
     @Transactional
     public EnderecoCandidato saveEndereco(Long id, EnderecoCandidato enderecoCandidato) {
+        if(!enderecoCandidato.getEnderecoCep().matches("^\\d{5}-\\d{3}$")){
+            throw new CandidatoException(CandidatoException.FORMATO_CEP);
+        }
+        if(enderecoCandidato.getEnderecoBairro().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "bairro");
+        }
+        if(enderecoCandidato.getEnderecoCidade().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "cidade");
+        }
+        if(enderecoCandidato.getEnderecoEstado().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "estado");
+        }
+        if(enderecoCandidato.getEnderecoRua().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "logradouro");
+        }
+
         Candidato candidato = this.findOne(id);
 
         enderecoCandidato.setCandidato(candidato);
@@ -107,6 +148,12 @@ public class CandidatoService {
     }
     @Transactional
     public FormacaoAcademica updateFormacao(Long id, FormacaoAcademica novaFormacaoAcademica) {
+        if(novaFormacaoAcademica.getCurso().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "curso");
+        }
+        if(novaFormacaoAcademica.getInstituicao().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "instituição");
+        }
         FormacaoAcademica formacaoExistente = this.formacaoAcademicaRepository.findById(id).get();
 
         formacaoExistente.setAnoConclusao(novaFormacaoAcademica.getAnoConclusao());
@@ -118,6 +165,12 @@ public class CandidatoService {
     }
     @Transactional
     public FormacaoAcademica saveFormacao(Long id, FormacaoAcademica formacaoAcademica) {
+        if(formacaoAcademica.getCurso().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "curso");
+        }
+        if(formacaoAcademica.getInstituicao().matches(".*\\d.*")) {
+            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "instituição");
+        }
         Candidato candidato = this.findOne(id);
 
         formacaoAcademica.setCandidato(candidato);

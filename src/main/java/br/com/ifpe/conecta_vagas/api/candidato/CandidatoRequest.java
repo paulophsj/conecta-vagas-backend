@@ -23,7 +23,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CandidatoRequest {
-    @CPF(message = "O campo CPF deve ser no formado 123.456.789-01")
+    @CPF(message = "O campo CPF deve ser no formado 123.456.789-01 e ser um CPF válido")
     @NotBlank(message = "O campo CPF não pode ser 'null' ou vazio.")
     private String cpf;
 
@@ -38,11 +38,12 @@ public class CandidatoRequest {
     private String cargoPretendido;
 
     @PositiveOrZero(message = "A pretensão salarial não pode ser negativa.")
-    private double pretensaoSalarial;
+    private Double pretensaoSalarial;
 
     @Size(max = 500, message = "O resumo profissional deve ter no máximo 500 caracteres.")
     private String resumoProfissional;
 
+    @Size(min = 15, max = 15, message = "O número de telefone deve ter exatamente {max} caracteres.")
     private String numeroTelefone;
 
     @NotBlank(message = "O campo senha não pode ser 'null' ou vazio.")

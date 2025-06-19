@@ -47,12 +47,12 @@ public class Candidato extends EntidadeAuditavel {
     private String cargoPretendido;
 
     @Column
-    private double pretensaoSalarial;
+    private Double pretensaoSalarial;
 
     @Column(length = 500)
     private String resumoProfissional;
 
-    @Column(unique = true, nullable = true, length = 20)
+    @Column(unique = true, nullable = true, length = 15)
     private String numeroTelefone;
 
     @Column(nullable = false, length = 15)
