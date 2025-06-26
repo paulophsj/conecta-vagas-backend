@@ -55,7 +55,7 @@ public class Candidato extends EntidadeAuditavel {
     @Column(unique = true, nullable = true, length = 15)
     private String numeroTelefone;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, length = 50)
     private String senha;
 
     @Column(unique = true, nullable = false, length = 100)

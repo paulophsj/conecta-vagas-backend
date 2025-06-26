@@ -1,6 +1,7 @@
 package br.com.ifpe.conecta_vagas.util.enums.recrutador;
 
 public enum PorteEmpresa {
+    MEI("Microempreendedor Individual"),
     MICRO("Microempresa"),
     PEQUENA("Pequena Empresa"),
     MEDIA("Média Empresa"),

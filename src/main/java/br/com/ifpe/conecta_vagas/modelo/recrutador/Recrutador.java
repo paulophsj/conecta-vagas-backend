@@ -29,7 +29,7 @@ public class Recrutador extends EntidadeAuditavel {
     @Column(nullable = false)
     private String nomeEmpresa;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, length = 50)
     private String senha;
 
     @Column(nullable = false)

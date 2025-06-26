@@ -26,7 +26,7 @@ public class RecrutadorRequest {
     private String nomeEmpresa;
 
     @NotBlank(message = "O campo senha não pode ser 'null' ou vazio.")
-    @Size(min = 6, max = 15, message = "A senha deve ter entre {min} e {max} caracteres.")
+    @Size(min = 6, max = 50, message = "A senha deve ter entre {min} e {max} caracteres.")
     private String senha;
 
     @NotBlank(message = "O campo email não pode ser 'null' ou vazio.")
