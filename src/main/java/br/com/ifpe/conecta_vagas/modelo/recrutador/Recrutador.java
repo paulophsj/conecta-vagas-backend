@@ -26,6 +26,7 @@ public class Recrutador extends EntidadeAuditavel {
     @Column(unique = true, nullable = false, length = 18)
     private String cnpj;
 
+    //Comentario
     @Column(nullable = false)
     private String nomeEmpresa;
 
