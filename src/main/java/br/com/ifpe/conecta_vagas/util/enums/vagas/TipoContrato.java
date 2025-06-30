@@ -1,4 +1,4 @@
-package br.com.ifpe.conecta_vagas.util.enums.vagas;
+package main.java.br.com.ifpe.conecta_vagas.util.enums.vagas;
 
 public enum TipoContrato {
     CLT("CLT"),
