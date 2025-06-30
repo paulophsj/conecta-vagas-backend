@@ -44,6 +44,6 @@ public class Vagas extends EntidadeAuditavel {
     @Column(nullable = false)
     private TipoContrato tipoContrato;
 
-    @Column(nullable = true, length = 3)
+    @Column(nullable = true, length = 999)
     private Integer cargaHoraria;
 }
