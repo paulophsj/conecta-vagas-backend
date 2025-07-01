@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
@@ -60,4 +63,8 @@ public class Candidato extends EntidadeAuditavel {
 
     @Column(unique = true, nullable = false, length = 100)
     private String email;
+
+    @OneToMany(mappedBy = "candidato")
+    @JsonIgnore
+    private List<Chat> chats;
 }

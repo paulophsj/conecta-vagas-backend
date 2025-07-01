@@ -1,12 +1,18 @@
 package br.com.ifpe.conecta_vagas.modelo.recrutador;
 
+import java.util.List;
+
 import org.hibernate.annotations.SQLRestriction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import br.com.ifpe.conecta_vagas.util.enums.recrutador.PorteEmpresa;
 import br.com.ifpe.conecta_vagas.util.enums.recrutador.Setores;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -59,4 +65,8 @@ public class Recrutador extends EntidadeAuditavel {
 
     @Column(nullable = false)
     private Setores setorEmpresa;
+
+    @OneToMany(mappedBy = "recrutador")
+    @JsonIgnore
+    private List<Chat> chats;
 }
