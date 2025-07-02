@@ -12,13 +12,22 @@ public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
 
+    public Chat findOne(Long id){
+        return this.chatRepository.findById(id).get();
+    }
+
     @Transactional
     public Chat save(Candidato candidato, Recrutador recrutador) {
-        Chat hasChat = this.chatRepository.findOne()
+        boolean hasChat = this.chatRepository.existsByCandidatoAndRecrutador(candidato, recrutador);
+
+        if(hasChat){
+            throw new IllegalStateException("Já existe um chat ativo.");
+        }
 
         Chat chat = new Chat();
         chat.setCandidato(candidato);
         chat.setRecrutador(recrutador);
+        chat.setHabilitado(Boolean.TRUE);
 
         return this.chatRepository.save(chat);
     }

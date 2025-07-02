@@ -2,6 +2,8 @@ package br.com.ifpe.conecta_vagas.modelo.mensagem;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
@@ -32,5 +34,6 @@ public class Mensagem extends EntidadeAuditavel{
     private Boolean enviadoPorCandidato;
     
     @ManyToOne
+    @JsonIgnore
     private Chat chat;
 }
