@@ -84,6 +84,11 @@ public class CandidatoService {
     /*
      * Services para relação Candidato > EnderecoCandidato
      */
+    public List<EnderecoCandidato> findAllEndereco(Long id) {
+        List<EnderecoCandidato> allEnderecos = this.enderecoCandidatoRepository.findAllByIdCandidato(id);
+        return allEnderecos;
+    }
+
     @Transactional
     public void deleteEndereco(Long id) {
         EnderecoCandidato enderecoCandidato = this.enderecoCandidatoRepository.findById(id).get();
@@ -163,6 +168,11 @@ public class CandidatoService {
     /*
      * Services para relação Candidato > FormacaoAcademica
      */
+    public List<FormacaoAcademica> findAllFormacao(Long id) {
+        List<FormacaoAcademica> allFormacao = this.formacaoAcademicaRepository.findAllByIdCandidato(id);
+        return allFormacao;
+    }
+
     @Transactional
     public void deleteFormacao(Long id) {
         FormacaoAcademica formacaoAcademica = this.formacaoAcademicaRepository.findById(id).get();

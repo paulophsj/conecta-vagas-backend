@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.ifpe.conecta_vagas.modelo.acesso.Usuario;
 import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
+import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import br.com.ifpe.conecta_vagas.util.enums.recrutador.PorteEmpresa;
 import br.com.ifpe.conecta_vagas.util.enums.recrutador.Setores;
@@ -32,6 +33,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class Recrutador extends EntidadeAuditavel {
+    @OneToMany
+    private List<Vagas> vagas;
+
     @OneToOne
    @JoinColumn(nullable = false)
    private Usuario usuario;

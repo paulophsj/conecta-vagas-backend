@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api/vagas")
@@ -28,23 +25,26 @@ public class VagasController {
     @Autowired
     private VagasService vagasService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Vagas> findOne(@PathVariable("id") Long id){
+    @GetMapping("/{id}") // Uma única vaga
+    public ResponseEntity<Vagas> findOne(@PathVariable("id") Long id) {
         Vagas vaga = this.vagasService.findOne(id);
         return new ResponseEntity<Vagas>(vaga, HttpStatus.OK);
     }
-    @PostMapping
-    public ResponseEntity<Vagas> save(@RequestBody @Valid VagasRequest request) {
-        Vagas vaga = this.vagasService.save(request.build());
+
+    @PostMapping("/{id}")
+    public ResponseEntity<Vagas> save(@PathVariable("id") Long id, @RequestBody @Valid VagasRequest request) {
+        Vagas vaga = this.vagasService.save(id, request.build());
         return new ResponseEntity<Vagas>(vaga, HttpStatus.OK);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<Vagas> update(@PathVariable("id") Long id, @RequestBody @Valid VagasRequest request) {
         Vagas vaga = this.vagasService.update(id, request.build());
         return new ResponseEntity<Vagas>(vaga, HttpStatus.OK);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remove(@PathVariable("id") Long id){
+    public ResponseEntity<Void> remove(@PathVariable("id") Long id) {
         this.vagasService.remove(id);
         return ResponseEntity.ok().build();
     }

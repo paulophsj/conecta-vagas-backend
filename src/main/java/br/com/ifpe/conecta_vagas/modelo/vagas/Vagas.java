@@ -1,11 +1,15 @@
 package br.com.ifpe.conecta_vagas.modelo.vagas;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import br.com.ifpe.conecta_vagas.util.enums.vagas.TipoContrato;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +25,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class Vagas extends EntidadeAuditavel {
+    @ManyToOne
+    @JsonIgnore
+    private Recrutador recrutador;
 
     @Column(nullable = false, length = 150)
     private String titulo;
