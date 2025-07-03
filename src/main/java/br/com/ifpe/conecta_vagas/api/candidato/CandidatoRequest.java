@@ -1,12 +1,16 @@
 package br.com.ifpe.conecta_vagas.api.candidato;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.ifpe.conecta_vagas.modelo.acesso.Perfil;
+import br.com.ifpe.conecta_vagas.modelo.acesso.Usuario;
 import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -46,24 +50,32 @@ public class CandidatoRequest {
     @Size(min = 15, max = 15, message = "O número de telefone deve ter exatamente {max} caracteres.")
     private String numeroTelefone;
 
-    @NotBlank(message = "O campo senha não pode ser 'null' ou vazio.")
-    @Size(min = 6, max = 50, message = "A senha deve ter entre {min} e {max} caracteres.")
-    private String senha;
-
-    @NotBlank(message = "O campo email não pode ser 'null' ou vazio.")
+    @NotBlank(message = "O e-mail é de preenchimento obrigatório")
+    @Email
     private String email;
 
-    public Candidato build(){
+    @NotBlank(message = "A senha é de preenchimento obrigatório")
+    @Size(min = 6, max = 50, message = "A senha deve ter entre {min} e {max} caracteres.")
+    private String password;
+
+    public Usuario buildUsuario() {
+        return Usuario.builder()
+                .username(email)
+                .password(password)
+                .roles(Arrays.asList(new Perfil(Perfil.ROLE_CANDIDATO)))
+                .build();
+    }
+
+    public Candidato build() {
         return Candidato.builder()
-            .cpf(cpf)
-            .nome(nome)
-            .dataNascimento(dataNascimento)
-            .cargoPretendido(cargoPretendido)
-            .pretensaoSalarial(pretensaoSalarial)
-            .resumoProfissional(resumoProfissional)
-            .numeroTelefone(numeroTelefone)
-            .senha(senha)
-            .email(email)
-            .build();
+                .cpf(cpf)
+                .nome(nome)
+                .dataNascimento(dataNascimento)
+                .cargoPretendido(cargoPretendido)
+                .pretensaoSalarial(pretensaoSalarial)
+                .resumoProfissional(resumoProfissional)
+                .numeroTelefone(numeroTelefone)
+                .usuario(buildUsuario())
+                .build();
     }
 }

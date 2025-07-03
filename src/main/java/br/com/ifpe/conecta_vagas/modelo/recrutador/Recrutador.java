@@ -6,13 +6,16 @@ import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.ifpe.conecta_vagas.modelo.acesso.Usuario;
 import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import br.com.ifpe.conecta_vagas.util.enums.recrutador.PorteEmpresa;
 import br.com.ifpe.conecta_vagas.util.enums.recrutador.Setores;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -29,18 +32,16 @@ import lombok.Setter;
 @Setter
 @Builder
 public class Recrutador extends EntidadeAuditavel {
+    @OneToOne
+   @JoinColumn(nullable = false)
+   private Usuario usuario;
+
     @Column(unique = true, nullable = false, length = 18)
     private String cnpj;
 
     //Comentario
     @Column(nullable = false)
     private String nomeEmpresa;
-
-    @Column(nullable = false, length = 50)
-    private String senha;
-
-    @Column(nullable = false)
-    private String email;
 
     @Column(unique = true, nullable = true, length = 15)
     private String numeroTelefone;

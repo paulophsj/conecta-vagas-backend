@@ -22,4 +22,6 @@ public class MensagemRequest {
     @NotBlank(message = "O campo conteudo não pode ser nulo ou vazio")
     @Length(max = 1000, message = "O campo conteudo deve ter no máximo {max} caracteres.")
     private String conteudo;
+
+    private Boolean enviadoPorCandidato;
 }

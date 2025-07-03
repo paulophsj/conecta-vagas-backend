@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.RecrutadorService;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,7 +24,7 @@ public class RecrutadorController {
     private RecrutadorService recrutadorService;
 
     @PostMapping
-    public ResponseEntity<Recrutador> save(@RequestBody RecrutadorRequest request) {
+    public ResponseEntity<Recrutador> save(@RequestBody @Valid RecrutadorRequest request) {
         Recrutador recrutador = this.recrutadorService.save(request.build());
         return new ResponseEntity<>(recrutador, HttpStatus.CREATED);
     }

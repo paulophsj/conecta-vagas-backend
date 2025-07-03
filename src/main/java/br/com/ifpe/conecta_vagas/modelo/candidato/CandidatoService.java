@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.conecta_vagas.modelo.acesso.Perfil;
+import br.com.ifpe.conecta_vagas.modelo.acesso.PerfilRepository;
+import br.com.ifpe.conecta_vagas.modelo.acesso.UsuarioService;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidatoRepository;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
@@ -21,25 +24,40 @@ public class CandidatoService {
     private EnderecoCandidatoRepository enderecoCandidatoRepository;
     @Autowired
     private FormacaoAcademicaRepository formacaoAcademicaRepository;
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private PerfilRepository perfilUsuarioRepository;
 
     public List<Candidato> findAll() {
         return this.candidatoRepository.findAll();
     };
+
     public Candidato findOne(Long id) {
         return this.candidatoRepository.findById(id).get();
     };
+
     @Transactional
     public Candidato save(Candidato candidato) {
-        if(candidato.getNome().matches(".*\\d.*")) {
+        if (candidato.getNome().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "nome");
 
         }
+        usuarioService.save(candidato.getUsuario());
+
+        for (Perfil perfil : candidato.getUsuario().getRoles()) {
+            perfil.setHabilitado(Boolean.TRUE);
+            perfilUsuarioRepository.save(perfil);
+        }
+
         candidato.setHabilitado(Boolean.TRUE);
         return candidatoRepository.save(candidato);
     };
+
     @Transactional
     public Candidato update(Long id, Candidato novoCandidato) {
-        if(novoCandidato.getNome().matches(".*\\d.*")) {
+        if (novoCandidato.getNome().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "nome");
 
         }
@@ -52,15 +70,17 @@ public class CandidatoService {
         antigoCandidato.setPretensaoSalarial(novoCandidato.getPretensaoSalarial());
         antigoCandidato.setResumoProfissional(novoCandidato.getResumoProfissional());
         antigoCandidato.setNumeroTelefone(novoCandidato.getNumeroTelefone());
-        antigoCandidato.setSenha(novoCandidato.getSenha());
+        antigoCandidato.getUsuario().setPassword(novoCandidato.getUsuario().getPassword());
 
         return this.candidatoRepository.save(novoCandidato);
     }
+
     @Transactional
     public void delete(Long id) {
         Candidato candidato = this.findOne(id);
         candidato.setHabilitado(Boolean.FALSE);
     }
+
     /*
      * Services para relação Candidato > EnderecoCandidato
      */
@@ -70,21 +90,22 @@ public class CandidatoService {
         enderecoCandidato.setHabilitado(Boolean.FALSE);
         this.enderecoCandidatoRepository.save(enderecoCandidato);
     }
+
     @Transactional
     public EnderecoCandidato updateEndereco(Long id, EnderecoCandidato novoEnderecoCandidato) {
-        if(!novoEnderecoCandidato.getEnderecoCep().matches("^\\d{5}-\\d{3}$")){
+        if (!novoEnderecoCandidato.getEnderecoCep().matches("^\\d{5}-\\d{3}$")) {
             throw new CandidatoException(CandidatoException.FORMATO_CEP);
         }
-        if(novoEnderecoCandidato.getEnderecoBairro().matches(".*\\d.*")) {
+        if (novoEnderecoCandidato.getEnderecoBairro().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "bairro");
         }
-        if(novoEnderecoCandidato.getEnderecoCidade().matches(".*\\d.*")) {
+        if (novoEnderecoCandidato.getEnderecoCidade().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "cidade");
         }
-        if(novoEnderecoCandidato.getEnderecoEstado().matches(".*\\d.*")) {
+        if (novoEnderecoCandidato.getEnderecoEstado().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "estado");
         }
-        if(novoEnderecoCandidato.getEnderecoRua().matches(".*\\d.*")) {
+        if (novoEnderecoCandidato.getEnderecoRua().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "logradouro");
         }
 
@@ -100,21 +121,22 @@ public class CandidatoService {
 
         return this.enderecoCandidatoRepository.save(endereco);
     }
+
     @Transactional
     public EnderecoCandidato saveEndereco(Long id, EnderecoCandidato enderecoCandidato) {
-        if(!enderecoCandidato.getEnderecoCep().matches("^\\d{5}-\\d{3}$")){
+        if (!enderecoCandidato.getEnderecoCep().matches("^\\d{5}-\\d{3}$")) {
             throw new CandidatoException(CandidatoException.FORMATO_CEP);
         }
-        if(enderecoCandidato.getEnderecoBairro().matches(".*\\d.*")) {
+        if (enderecoCandidato.getEnderecoBairro().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "bairro");
         }
-        if(enderecoCandidato.getEnderecoCidade().matches(".*\\d.*")) {
+        if (enderecoCandidato.getEnderecoCidade().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "cidade");
         }
-        if(enderecoCandidato.getEnderecoEstado().matches(".*\\d.*")) {
+        if (enderecoCandidato.getEnderecoEstado().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "estado");
         }
-        if(enderecoCandidato.getEnderecoRua().matches(".*\\d.*")) {
+        if (enderecoCandidato.getEnderecoRua().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "logradouro");
         }
 
@@ -137,6 +159,7 @@ public class CandidatoService {
         return enderecoCandidato;
 
     }
+
     /*
      * Services para relação Candidato > FormacaoAcademica
      */
@@ -146,12 +169,13 @@ public class CandidatoService {
         formacaoAcademica.setHabilitado(Boolean.FALSE);
         this.formacaoAcademicaRepository.save(formacaoAcademica);
     }
+
     @Transactional
     public FormacaoAcademica updateFormacao(Long id, FormacaoAcademica novaFormacaoAcademica) {
-        if(novaFormacaoAcademica.getCurso().matches(".*\\d.*")) {
+        if (novaFormacaoAcademica.getCurso().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "curso");
         }
-        if(novaFormacaoAcademica.getInstituicao().matches(".*\\d.*")) {
+        if (novaFormacaoAcademica.getInstituicao().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "instituição");
         }
         FormacaoAcademica formacaoExistente = this.formacaoAcademicaRepository.findById(id).get();
@@ -163,12 +187,13 @@ public class CandidatoService {
 
         return this.formacaoAcademicaRepository.save(formacaoExistente);
     }
+
     @Transactional
     public FormacaoAcademica saveFormacao(Long id, FormacaoAcademica formacaoAcademica) {
-        if(formacaoAcademica.getCurso().matches(".*\\d.*")) {
+        if (formacaoAcademica.getCurso().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "curso");
         }
-        if(formacaoAcademica.getInstituicao().matches(".*\\d.*")) {
+        if (formacaoAcademica.getInstituicao().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "instituição");
         }
         Candidato candidato = this.findOne(id);
