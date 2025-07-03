@@ -4,6 +4,7 @@ public enum NivelAcademico {
     ENSINO_FUNDAMENTAL("Ensino Fundamental"),
     ENSINO_MEDIO("Ensino Médio"),
     TECNICO("Técnico"),
+    TECNOLOGO("Tecnólogo"),
     SUPERIOR("Superior"),
     POS_GRADUACAO("Pós-Graduação"),
     MESTRADO("Mestrado"),
