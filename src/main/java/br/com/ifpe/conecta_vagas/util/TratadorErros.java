@@ -12,10 +12,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class TratadorErros {
 
-    @ExceptionHandler(Exception.class)
+    /*@ExceptionHandler(Exception.class)
     public ResponseEntity tratarErro500(Exception ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", (ex.getMessage().equals("Bad credentials")) ? ex.getMessage() : ex.getMessage().split("default message")[2].replace("[", "").replaceAll("]", "").trim());
@@ -43,5 +43,5 @@ public class TratadorErros {
         response.put("status", HttpStatus.BAD_REQUEST.value());
 
         return ResponseEntity.badRequest().body(response);
-    }
+    }*/
 }

@@ -13,11 +13,13 @@ import br.com.ifpe.conecta_vagas.modelo.acesso.Usuario;
 import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
+import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -71,4 +73,7 @@ public class Candidato extends EntidadeAuditavel {
     @OneToMany(mappedBy = "candidato")
     @JsonIgnore
     private List<Chat> chats;
+
+    @OneToMany(mappedBy = "candidato")
+    private List<Vagas> vagas;
 }

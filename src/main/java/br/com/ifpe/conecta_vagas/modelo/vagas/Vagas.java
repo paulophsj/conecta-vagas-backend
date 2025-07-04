@@ -2,6 +2,7 @@ package br.com.ifpe.conecta_vagas.modelo.vagas;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import br.com.ifpe.conecta_vagas.util.enums.vagas.TipoContrato;
@@ -53,4 +54,8 @@ public class Vagas extends EntidadeAuditavel {
 
     @Column(nullable = true, length = 999)
     private Integer cargaHoraria;
+
+    @ManyToOne
+    @JsonIgnore
+    private Candidato candidato;
 }

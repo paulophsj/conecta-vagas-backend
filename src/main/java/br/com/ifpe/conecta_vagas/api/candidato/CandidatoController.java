@@ -16,6 +16,7 @@ import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
 import br.com.ifpe.conecta_vagas.modelo.candidato.CandidatoService;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,11 @@ public class CandidatoController {
     @Autowired
     private CandidatoService candidatoService;
 
+    @GetMapping
+    public ResponseEntity<Candidato> encontrarSessao(HttpServletRequest request){
+        Candidato candidato = this.candidatoService.obterCandidatoLogado(request);
+        return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Candidato> findOne(@PathVariable("id") Long id) {
         Candidato candidato = this.candidatoService.findOne(id);
@@ -44,8 +50,14 @@ public class CandidatoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Candidato> update(@PathVariable("id") Long id, @RequestBody @Valid CandidatoRequest request) {
-        Candidato candidato = this.candidatoService.update(id, request.build());
+    public ResponseEntity<Candidato> update(@PathVariable("id") Long id, @RequestBody @Valid CandidatoRequest candidatoRequest, HttpServletRequest request) {
+        Candidato candidatoLogado = this.candidatoService.obterCandidatoLogado(request);
+
+        if(id != candidatoLogado.getId()){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Candidato candidato = this.candidatoService.update(id, candidatoRequest.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
 

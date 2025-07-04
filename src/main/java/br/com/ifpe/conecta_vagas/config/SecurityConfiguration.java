@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                                 .authorizeHttpRequests(authorize -> authorize
 
                                                 .requestMatchers(HttpMethod.POST, "/api/candidato").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/candidato").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/recrutador").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
 

@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.conecta_vagas.modelo.acesso.Perfil;
 import br.com.ifpe.conecta_vagas.modelo.acesso.PerfilRepository;
+import br.com.ifpe.conecta_vagas.modelo.acesso.Usuario;
 import br.com.ifpe.conecta_vagas.modelo.acesso.UsuarioService;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidatoRepository;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademicaRepository;
+import br.com.ifpe.conecta_vagas.modelo.seguranca.JwtService;
 import br.com.ifpe.conecta_vagas.util.exceptions.CandidatoException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -26,6 +29,9 @@ public class CandidatoService {
     private FormacaoAcademicaRepository formacaoAcademicaRepository;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private JwtService jwtService;
+
 
     @Autowired
     private PerfilRepository perfilUsuarioRepository;
@@ -70,9 +76,8 @@ public class CandidatoService {
         antigoCandidato.setPretensaoSalarial(novoCandidato.getPretensaoSalarial());
         antigoCandidato.setResumoProfissional(novoCandidato.getResumoProfissional());
         antigoCandidato.setNumeroTelefone(novoCandidato.getNumeroTelefone());
-        antigoCandidato.getUsuario().setPassword(novoCandidato.getUsuario().getPassword());
 
-        return this.candidatoRepository.save(novoCandidato);
+        return candidatoRepository.save(novoCandidato);
     }
 
     @Transactional
@@ -225,4 +230,22 @@ public class CandidatoService {
 
         return formacaoAcademica;
     }
+        public Candidato obterCandidatoLogado(HttpServletRequest request) {
+
+        Candidato candidatoLogado = null;
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null) {
+
+            String jwt = authHeader.substring(7);
+            String userEmail = jwtService.extractUsername(jwt);
+
+            Usuario usuarioEncontrado = usuarioService.findByUsername(userEmail);
+            candidatoLogado = this.candidatoRepository.findByUsuario(usuarioEncontrado);
+            return candidatoLogado;
+        }
+
+        return candidatoLogado;
+    }
+
 }
