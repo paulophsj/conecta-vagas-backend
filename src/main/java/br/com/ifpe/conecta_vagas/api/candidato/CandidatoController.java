@@ -1,6 +1,8 @@
 package br.com.ifpe.conecta_vagas.api.candidato;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,10 +35,11 @@ public class CandidatoController {
     private CandidatoService candidatoService;
 
     @GetMapping
-    public ResponseEntity<Candidato> encontrarSessao(HttpServletRequest request){
+    public ResponseEntity<Candidato> encontrarSessao(HttpServletRequest request) {
         Candidato candidato = this.candidatoService.obterCandidatoLogado(request);
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Candidato> findOne(@PathVariable("id") Long id) {
         Candidato candidato = this.candidatoService.findOne(id);
@@ -46,15 +49,17 @@ public class CandidatoController {
     @PostMapping
     public ResponseEntity<Candidato> save(@RequestBody @Valid CandidatoRequest request) {
         Candidato candidato = this.candidatoService.save(request.build());
-        return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
+        return new ResponseEntity<Candidato>(candidato, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Candidato> update(@PathVariable("id") Long id, @RequestBody @Valid CandidatoRequest candidatoRequest, HttpServletRequest request) {
-        Candidato candidatoLogado = this.candidatoService.obterCandidatoLogado(request);
+    public ResponseEntity<?> update(@PathVariable("id") Long id,
+        @RequestBody @Valid CandidatoRequest candidatoRequest, HttpServletRequest request) {
 
-        if(id != candidatoLogado.getId()){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        if (!id.equals(this.candidatoService.obterCandidatoLogado(request))) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato.");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
         }
 
         Candidato candidato = this.candidatoService.update(id, candidatoRequest.build());
@@ -62,7 +67,14 @@ public class CandidatoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id, HttpServletRequest request) {
+
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
+
         this.candidatoService.delete(id);
         return ResponseEntity.ok().build();
     }
@@ -71,27 +83,45 @@ public class CandidatoController {
      * Controller > Endereco_Candidato
      */
     @GetMapping("/endereco/{id}")
-    public ResponseEntity<List<EnderecoCandidato>> getEndereco(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getEndereco(@PathVariable("id") Long id, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
         List<EnderecoCandidato> enderecoCandidato = this.candidatoService.findAllEndereco(id);
         return new ResponseEntity<List<EnderecoCandidato>>(enderecoCandidato, HttpStatus.OK);
     }
 
     @PostMapping("/endereco/{id}")
-    public ResponseEntity<EnderecoCandidato> saveEndereco(@PathVariable("id") Long id,
-            @RequestBody EnderecoCandidatoRequest request) {
-        EnderecoCandidato enderecoCandidato = this.candidatoService.saveEndereco(id, request.build());
+    public ResponseEntity<?> saveEndereco(@PathVariable("id") Long id, @RequestBody EnderecoCandidatoRequest enderecoCandidatoRequest, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
+        EnderecoCandidato enderecoCandidato = this.candidatoService.saveEndereco(id, enderecoCandidatoRequest.build());
         return new ResponseEntity<EnderecoCandidato>(enderecoCandidato, HttpStatus.OK);
     }
 
     @PutMapping("/endereco/{id}")
-    public ResponseEntity<EnderecoCandidato> updateEndereco(@PathVariable("id") Long id,
-            @RequestBody EnderecoCandidatoRequest request) {
-        EnderecoCandidato enderecoCandidato = this.candidatoService.updateEndereco(id, request.build());
+    public ResponseEntity<?> updateEndereco(@PathVariable("id") Long id, @RequestBody EnderecoCandidatoRequest enderecoCandidatoRequest, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
+        EnderecoCandidato enderecoCandidato = this.candidatoService.updateEndereco(id, enderecoCandidatoRequest.build());
         return new ResponseEntity<EnderecoCandidato>(enderecoCandidato, HttpStatus.OK);
     }
 
     @DeleteMapping("/endereco/{id}")
-    public ResponseEntity<Void> deleteEndereco(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteEndereco(@PathVariable("id") Long id, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
         this.candidatoService.delete(id);
         return ResponseEntity.ok().build();
     }
@@ -100,27 +130,45 @@ public class CandidatoController {
      * Controller > Formacao_Candidato
      */
     @GetMapping("/formacao/{id}")
-    public ResponseEntity<List<FormacaoAcademica>> getFormacao(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getFormacao(@PathVariable("id") Long id, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
         List<FormacaoAcademica> formacaoAcademicas = this.candidatoService.findAllFormacao(id);
         return new ResponseEntity<List<FormacaoAcademica>>(formacaoAcademicas, HttpStatus.OK);
     }
 
     @PostMapping("/formacao/{id}")
-    public ResponseEntity<FormacaoAcademica> saveFormacao(@PathVariable("id") Long id,
-            @RequestBody FormacaoAcademicaRequest request) {
-        FormacaoAcademica formacaoAcademica = this.candidatoService.saveFormacao(id, request.build());
+    public ResponseEntity<?> saveFormacao(@PathVariable("id") Long id, @RequestBody FormacaoAcademicaRequest formacaoAcademicaRequest, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
+        FormacaoAcademica formacaoAcademica = this.candidatoService.saveFormacao(id, formacaoAcademicaRequest.build());
         return new ResponseEntity<FormacaoAcademica>(formacaoAcademica, HttpStatus.OK);
     }
 
     @PutMapping("/formacao/{id}")
-    public ResponseEntity<FormacaoAcademica> updateFormacao(@PathVariable("id") Long id,
-            @RequestBody FormacaoAcademicaRequest request) {
-        FormacaoAcademica formacaoAcademica = this.candidatoService.updateFormacao(id, request.build());
+    public ResponseEntity<?> updateFormacao(@PathVariable("id") Long id, @RequestBody FormacaoAcademicaRequest formacaoAcademicaRequest, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
+        FormacaoAcademica formacaoAcademica = this.candidatoService.updateFormacao(id, formacaoAcademicaRequest.build());
         return new ResponseEntity<FormacaoAcademica>(formacaoAcademica, HttpStatus.OK);
     }
 
     @DeleteMapping("/formacao/{id}")
-    public ResponseEntity<Void> deleteFormacao(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteFormacao(@PathVariable("id") Long id, HttpServletRequest request) {
+        if(!id.equals(this.candidatoService.obterCandidatoLogado(request))){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
         this.candidatoService.deleteFormacao(id);
         return ResponseEntity.ok().build();
     }
