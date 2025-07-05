@@ -69,6 +69,13 @@ public class CandidatoService {
         }
         Candidato antigoCandidato = this.findOne(id);
 
+        Usuario antigoUsuario = antigoCandidato.getUsuario();
+
+        antigoUsuario.setPassword(novoCandidato.getUsuario().getPassword());
+        antigoUsuario.setUsername(novoCandidato.getUsuario().getUsername());
+        
+        Usuario novoUsuario = usuarioService.save(antigoUsuario);
+
         antigoCandidato.setCargoPretendido(novoCandidato.getCargoPretendido());
         antigoCandidato.setCpf(novoCandidato.getCpf());
         antigoCandidato.setDataNascimento(novoCandidato.getDataNascimento());
@@ -76,8 +83,9 @@ public class CandidatoService {
         antigoCandidato.setPretensaoSalarial(novoCandidato.getPretensaoSalarial());
         antigoCandidato.setResumoProfissional(novoCandidato.getResumoProfissional());
         antigoCandidato.setNumeroTelefone(novoCandidato.getNumeroTelefone());
+        antigoCandidato.setUsuario(novoUsuario);
 
-        return candidatoRepository.save(novoCandidato);
+        return candidatoRepository.save(antigoCandidato);
     }
 
     @Transactional
