@@ -73,10 +73,6 @@ public class SecurityConfiguration {
                                                                 Perfil.ROLE_RECRUTADOR)
 
                                                 // Candidato
-                                                .requestMatchers(HttpMethod.GET, "/api/candidato/*").hasAnyAuthority(
-                                                                Perfil.ROLE_CANDIDATO,
-                                                                Perfil.ROLE_RECRUTADOR)
-
                                                 .requestMatchers(HttpMethod.POST, "/api/candidato").hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
@@ -91,7 +87,7 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
-                                                .requestMatchers(HttpMethod.POST, "/api/candidato/endereco/*")
+                                                .requestMatchers(HttpMethod.POST, "/api/candidato/endereco")
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
@@ -99,7 +95,7 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
-                                                .requestMatchers(HttpMethod.GET, "/api/candidato/endereco/*")
+                                                .requestMatchers(HttpMethod.GET, "/api/candidato/endereco")
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
@@ -108,7 +104,7 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
-                                                .requestMatchers(HttpMethod.POST, "/api/candidato/formacao/*")
+                                                .requestMatchers(HttpMethod.POST, "/api/candidato/formacao")
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
@@ -116,7 +112,7 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
-                                                .requestMatchers(HttpMethod.GET, "/api/candidato/formacao/*")
+                                                .requestMatchers(HttpMethod.GET, "/api/candidato/formacao")
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
