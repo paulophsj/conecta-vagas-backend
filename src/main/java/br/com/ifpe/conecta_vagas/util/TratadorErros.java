@@ -18,7 +18,7 @@ public class TratadorErros {
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
 
         Map<String, Object> response = new HashMap<>();
-        List<Map<String, String>> errors = new ArrayList();
+        List<Map<String, String>> errors = new ArrayList<>();
 
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             Map<String, String> errorDetails = new HashMap<>();
