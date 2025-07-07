@@ -1,6 +1,8 @@
 package br.com.ifpe.conecta_vagas.api.recrutador;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.RecrutadorService;
 import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
 import br.com.ifpe.conecta_vagas.modelo.vagas.VagasService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,34 +35,38 @@ public class RecrutadorController {
     private VagasService vagasService;
 
     @PostMapping
-    public ResponseEntity<Recrutador> save(@RequestBody @Valid RecrutadorRequest request) {
-        Recrutador recrutador = this.recrutadorService.save(request.build());
+    public ResponseEntity<Recrutador> save(@RequestBody @Valid RecrutadorRequest recrutadorRequest) {
+        Recrutador recrutador = this.recrutadorService.save(recrutadorRequest.build());
         return new ResponseEntity<Recrutador>(recrutador, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Recrutador> update(@PathVariable("id") Long id,
-            @RequestBody @Valid RecrutadorRequest request) {
-        Recrutador novoRecrutador = this.recrutadorService.update(id, request.build());
+    @PutMapping
+    public ResponseEntity<Recrutador> update(@RequestBody @Valid RecrutadorRequest recrutadorRequest, HttpServletRequest request) {
+        Recrutador novoRecrutador = this.recrutadorService.update(recrutadorService.obterRecrutadorLogado(request).getId(), recrutadorRequest.build());
         return new ResponseEntity<Recrutador>(novoRecrutador, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id, HttpServletRequest request) {
+        if(!id.equals(recrutadorService.obterRecrutadorLogado(request).getId())){
+            Map<String, Object> erros = new HashMap<>();
+            erros.put("message", "Você não tem permissão para alterar esse recrutador.");
+            return new ResponseEntity<Map<String, Object>>(erros, HttpStatus.UNAUTHORIZED);
+        }
         this.recrutadorService.delete(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Recrutador> findOne(@PathVariable("id") Long id) {
-        Recrutador recrutador = this.recrutadorService.findOne(id);
+    @GetMapping
+    public ResponseEntity<Recrutador> encontrarSessao(HttpServletRequest request) {
+        Recrutador recrutador = this.recrutadorService.findOne(recrutadorService.obterRecrutadorLogado(request).getId());
         return new ResponseEntity<Recrutador>(recrutador, HttpStatus.OK);
     }
 
     // Todas as vagas de um recrutador
-    @GetMapping("/vagas/{id}") // Todas as vagas de um recrutador
+    @GetMapping("/vagas/{id}")
     public ResponseEntity<List<Vagas>> findAll(@PathVariable("id") Long id) {
-        List<Vagas> vaga = this.vagasService.findAllVagas(id);
+        List<Vagas> vaga = this.vagasService.findAllVagasByRecrutador(id);
         return new ResponseEntity<List<Vagas>>(vaga, HttpStatus.OK);
     }
 }

@@ -46,11 +46,10 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
 
                                                 // Vagas
-                                                .requestMatchers(HttpMethod.GET, "/api/vagas/*").hasAnyAuthority(
-                                                                Perfil.ROLE_CANDIDATO,
-                                                                Perfil.ROLE_RECRUTADOR)
+                                                .requestMatchers(HttpMethod.GET, "/api/vagas/*").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/vagas").permitAll()
 
-                                                .requestMatchers(HttpMethod.POST, "/api/vagas/*").hasAnyAuthority(
+                                                .requestMatchers(HttpMethod.POST, "/api/vagas").hasAnyAuthority(
                                                                 Perfil.ROLE_RECRUTADOR)
 
                                                 .requestMatchers(HttpMethod.PUT, "/api/vagas/*").hasAnyAuthority(
@@ -58,10 +57,7 @@ public class SecurityConfiguration {
 
                                                 .requestMatchers(HttpMethod.DELETE, "/api/vagas/*").hasAnyAuthority(
                                                                 Perfil.ROLE_RECRUTADOR)
-                                                .requestMatchers(HttpMethod.GET, "/api/recrutador/vagas/*")
-                                                .hasAnyAuthority(
-                                                                Perfil.ROLE_RECRUTADOR,
-                                                                Perfil.ROLE_CANDIDATO)
+                                                .requestMatchers(HttpMethod.GET, "/api/recrutador/vagas/*").permitAll() //Obter todas as vagas de um recrutador
 
                                                 // Chat
                                                 .requestMatchers(HttpMethod.POST, "/api/chat").hasAnyAuthority(
@@ -73,6 +69,9 @@ public class SecurityConfiguration {
                                                                 Perfil.ROLE_RECRUTADOR)
 
                                                 // Candidato
+                                                .requestMatchers(HttpMethod.GET, "/api/candidato").hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO)
+
                                                 .requestMatchers(HttpMethod.POST, "/api/candidato").hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 

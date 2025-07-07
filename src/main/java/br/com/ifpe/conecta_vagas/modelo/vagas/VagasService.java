@@ -20,7 +20,13 @@ public class VagasService {
     public Vagas findOne(Long id){
         return this.vagasRepository.findById(id).get();
     }
-    public List<Vagas> findAllVagas(Long id){
+
+    //Obter todas as vagas do banco de dados
+    public List<Vagas> findAllVagas(){
+        return vagasRepository.findAll();
+    }
+    //Obter todas as vagas de um recrutador
+    public List<Vagas> findAllVagasByRecrutador(Long id){
         List<Vagas> allVagas = this.vagasRepository.findAllVagas(id);
         return allVagas;
     }

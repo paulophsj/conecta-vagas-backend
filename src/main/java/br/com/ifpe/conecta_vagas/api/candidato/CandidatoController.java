@@ -40,29 +40,15 @@ public class CandidatoController {
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Candidato> findOne(@PathVariable("id") Long id) {
-        Candidato candidato = this.candidatoService.findOne(id);
-        return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<Candidato> save(@RequestBody @Valid CandidatoRequest request) {
         Candidato candidato = this.candidatoService.save(request.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id,
-            @RequestBody @Valid CandidatoRequest candidatoRequest, HttpServletRequest request) {
-
-        if (!id.equals(this.candidatoService.obterCandidatoLogado(request))) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "Você não tem permissão para alterar este candidato.");
-            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
-        }
-
-        Candidato candidato = this.candidatoService.update(id, candidatoRequest.build());
+    @PutMapping
+    public ResponseEntity<Candidato> update(@RequestBody @Valid CandidatoRequest candidatoRequest, HttpServletRequest request) {
+        Candidato candidato = this.candidatoService.update(candidatoService.obterCandidatoLogado(request).getId(), candidatoRequest.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
 

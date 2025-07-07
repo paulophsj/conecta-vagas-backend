@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.conecta_vagas.modelo.acesso.Perfil;
 import br.com.ifpe.conecta_vagas.modelo.acesso.PerfilRepository;
+import br.com.ifpe.conecta_vagas.modelo.acesso.Usuario;
 import br.com.ifpe.conecta_vagas.modelo.acesso.UsuarioService;
+import br.com.ifpe.conecta_vagas.modelo.seguranca.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -14,12 +17,32 @@ public class RecrutadorService {
     private RecrutadorRepository recrutadorRepository;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private PerfilRepository perfilUsuarioRepository;
 
     public Recrutador findOne(Long id) {
         return recrutadorRepository.findById(id).get();
+    }
+
+    public Recrutador obterRecrutadorLogado(HttpServletRequest request) {
+
+        Recrutador recrutadorLogado = null;
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null) {
+
+            String jwt = authHeader.substring(7);
+            String userEmail = jwtService.extractUsername(jwt);
+
+            Usuario usuarioEncontrado = usuarioService.findByUsername(userEmail);
+            recrutadorLogado = this.recrutadorRepository.findByUsuario(usuarioEncontrado);
+            return recrutadorLogado;
+        }
+
+        return recrutadorLogado;
     }
 
     @Transactional
