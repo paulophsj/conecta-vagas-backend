@@ -33,12 +33,14 @@ public class AuthenticationController {
     public Map<Object, Object> signin(@RequestBody AuthenticationRequest data) {
     
         Usuario authenticatedUser = usuarioService.authenticate(data.getUsername(), data.getPassword());
+        String type = usuarioService.findByUsername(data.getUsername()).getRoles().get(0).getNome();
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         Map<Object, Object> loginResponse = new HashMap<>();
         loginResponse.put("username", authenticatedUser.getUsername());
         loginResponse.put("token", jwtToken);
+        loginResponse.put("type", type);
         loginResponse.put("tokenExpiresIn", jwtService.getExpirationTime());
 
         return loginResponse;
