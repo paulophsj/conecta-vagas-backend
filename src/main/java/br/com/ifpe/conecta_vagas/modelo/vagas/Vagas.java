@@ -1,8 +1,10 @@
 package br.com.ifpe.conecta_vagas.modelo.vagas;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
+import br.com.ifpe.conecta_vagas.modelo.candidatura.Candidatura;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import br.com.ifpe.conecta_vagas.util.enums.vagas.TipoContrato;
@@ -10,7 +12,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,7 +59,7 @@ public class Vagas extends EntidadeAuditavel {
     @Column(nullable = true, length = 999)
     private Integer cargaHoraria;
 
-    @ManyToOne
+    @OneToMany(mappedBy = "vagas", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Candidato candidato;
+    private List<Candidatura> candidaturas;
 }

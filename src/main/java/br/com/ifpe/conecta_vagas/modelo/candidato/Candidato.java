@@ -10,10 +10,10 @@ import org.hibernate.annotations.SQLRestriction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.ifpe.conecta_vagas.modelo.acesso.Usuario;
+import br.com.ifpe.conecta_vagas.modelo.candidatura.Candidatura;
 import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
 import br.com.ifpe.conecta_vagas.modelo.endereco_candidato.EnderecoCandidato;
 import br.com.ifpe.conecta_vagas.modelo.formacao_academica.FormacaoAcademica;
-import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,10 +41,10 @@ public class Candidato extends EntidadeAuditavel {
    @JoinColumn(nullable = false)
    private Usuario usuario;
 
-    @OneToMany(mappedBy = "candidato", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "candidato", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FormacaoAcademica> formacaoAcademica;
 
-    @OneToMany(mappedBy = "candidato", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "candidato", orphanRemoval = true, fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)
     private List<EnderecoCandidato> enderecos;
 
@@ -73,6 +73,7 @@ public class Candidato extends EntidadeAuditavel {
     @JsonIgnore
     private List<Chat> chats;
 
-    @OneToMany(mappedBy = "candidato")
-    private List<Vagas> vagas;
+    @OneToMany(mappedBy = "candidato", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Candidatura> candidaturas;
 }

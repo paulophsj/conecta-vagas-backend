@@ -57,7 +57,13 @@ public class SecurityConfiguration {
 
                                                 .requestMatchers(HttpMethod.DELETE, "/api/vagas/*").hasAnyAuthority(
                                                                 Perfil.ROLE_RECRUTADOR)
-                                                .requestMatchers(HttpMethod.GET, "/api/recrutador/vagas/*").permitAll() //Obter todas as vagas de um recrutador
+                                                .requestMatchers(HttpMethod.GET, "/api/recrutador/vagas/*").permitAll() // Obter
+                                                                                                                        // todas
+                                                                                                                        // as
+                                                                                                                        // vagas
+                                                                                                                        // de
+                                                                                                                        // um
+                                                                                                                        // recrutador
 
                                                 // Chat
                                                 .requestMatchers(HttpMethod.POST, "/api/chat").hasAnyAuthority(
@@ -122,6 +128,16 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.DELETE, "/api/recrutador/*")
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_RECRUTADOR)
+                                                // Candidatura
+                                                .requestMatchers(HttpMethod.GET, "/api/candidatura")
+                                                .hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO)
+                                                .requestMatchers(HttpMethod.POST, "/api/candidatura/*")
+                                                .hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO)
+                                                .requestMatchers(HttpMethod.DELETE, "/api/candidatura/*")
+                                                .hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO)
 
                                                 .anyRequest().authenticated()
 
