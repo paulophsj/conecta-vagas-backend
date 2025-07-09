@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Perfil extends EntidadeNegocio implements GrantedAuthority {
   
    public static final String ROLE_CANDIDATO = "CANDIDATO";
-   public static final String ROLE_RECRUTADOR = "ROLE_RECRUTADOR";
+   public static final String ROLE_RECRUTADOR = "RECRUTADOR";
   
    private String nome;
   

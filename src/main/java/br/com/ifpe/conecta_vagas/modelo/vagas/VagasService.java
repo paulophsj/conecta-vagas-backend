@@ -63,6 +63,7 @@ public class VagasService {
         antigaVaga.setSalario(novaVaga.getSalario());
         antigaVaga.setTipoContrato(novaVaga.getTipoContrato());
         antigaVaga.setTitulo(novaVaga.getTitulo());
+        antigaVaga.setFormato(novaVaga.getFormato());
         antigaVaga.setAtiva(novaVaga.getAtiva());
 
         return this.vagasRepository.save(antigaVaga);

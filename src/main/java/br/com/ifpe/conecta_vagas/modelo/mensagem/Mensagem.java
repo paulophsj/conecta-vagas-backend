@@ -2,6 +2,8 @@ package br.com.ifpe.conecta_vagas.modelo.mensagem;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
@@ -23,6 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@SQLRestriction("habilitado = true")
 public class Mensagem extends EntidadeAuditavel{
     @Column(nullable = false, length = 1000)
     private String conteudo;

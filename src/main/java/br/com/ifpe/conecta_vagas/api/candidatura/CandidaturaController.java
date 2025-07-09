@@ -21,8 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api/candidatura")
@@ -34,26 +32,29 @@ public class CandidaturaController {
 
     @GetMapping
     public ResponseEntity<List<Candidatura>> findAllByCandidato(HttpServletRequest request) {
-        List<Candidatura> candidatura = candidaturaService.findByCandidato(candidatoService.obterCandidatoLogado(request).getId());
+        List<Candidatura> candidatura = candidaturaService
+                .findByCandidato(candidatoService.obterCandidatoLogado(request).getId());
         return new ResponseEntity<List<Candidatura>>(candidatura, HttpStatus.OK);
     }
-    
+
     @PostMapping("/{id}")
     public ResponseEntity<?> save(@PathVariable("id") Long idVaga, HttpServletRequest request) {
-        boolean candidatoPosuiVaga = candidatoService.obterCandidatoLogado(request).getCandidaturas().stream().anyMatch(vaga -> vaga.getId().equals(idVaga));
-        if(candidatoPosuiVaga){
+        boolean candidatoPosuiVaga = candidaturaService.existsByCandidatoAndVagas(idVaga, candidatoService.obterCandidatoLogado(request).getId());
+        if (candidatoPosuiVaga) {
             Map<String, Object> erro = new HashMap<>();
-            erro.put("message", "Você Já está cadastrado nessa vaga");
+            erro.put("message", "Você está cadastrado nessa vaga");
 
             return new ResponseEntity<Map<String, Object>>(erro, HttpStatus.UNAUTHORIZED);
         }
-        Candidatura candidatura = candidaturaService.save(candidatoService.obterCandidatoLogado(request).getId(), idVaga);
+        Candidatura candidatura = candidaturaService.save(candidatoService.obterCandidatoLogado(request).getId(),
+                idVaga);
         return new ResponseEntity<Candidatura>(candidatura, HttpStatus.CREATED);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long idVaga, HttpServletRequest request){
-        boolean candidatoPosuiVaga = candidatoService.obterCandidatoLogado(request).getCandidaturas().stream().anyMatch(vaga -> vaga.getId().equals(idVaga));
-        if(!candidatoPosuiVaga){
+    public ResponseEntity<?> delete(@PathVariable("id") Long idVaga, HttpServletRequest request) {
+        boolean candidatoPosuiVaga = candidaturaService.existsByCandidatoAndVagas(idVaga, candidatoService.obterCandidatoLogado(request).getId());
+        if (!candidatoPosuiVaga) {
             Map<String, Object> erro = new HashMap<>();
             erro.put("message", "Você não possui uma vaga com esse id");
 
@@ -62,5 +63,5 @@ public class CandidaturaController {
         candidaturaService.ExcluirCandidatura(candidatoService.obterCandidatoLogado(request).getId(), idVaga);
         return ResponseEntity.ok().build();
     }
-    
+
 }

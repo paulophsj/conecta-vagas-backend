@@ -20,6 +20,12 @@ public class CandidaturaService {
     @Autowired
     private CandidatoService candidatoService;
 
+    public boolean existsByCandidatoAndVagas(Long idVaga, Long idCandidato){
+        Candidato candidato = candidatoService.findOne(idCandidato);
+        Vagas vagas = vagasService.findOne(idVaga);
+
+        return candidaturaRepository.existsByCandidatoAndVagas(candidato, vagas);
+    }
     public Candidatura findByIdCandidatoAndIdVaga(Long idCandidato, Long idVaga){
         return candidaturaRepository.findByIdCandidatoAndIdVaga(idCandidato, idVaga);
     }

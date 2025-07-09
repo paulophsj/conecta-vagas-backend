@@ -2,6 +2,8 @@ package br.com.ifpe.conecta_vagas.modelo.chat;
 
 import java.util.List;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
 import br.com.ifpe.conecta_vagas.modelo.mensagem.Mensagem;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
@@ -23,6 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@SQLRestriction("habilitado = true")
 public class Chat extends EntidadeAuditavel{
     @OneToMany(mappedBy = "chat")
     private List<Mensagem> mensagens;

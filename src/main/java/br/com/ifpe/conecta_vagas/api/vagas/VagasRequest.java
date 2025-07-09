@@ -2,6 +2,7 @@ package br.com.ifpe.conecta_vagas.api.vagas;
 
 
 import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
+import br.com.ifpe.conecta_vagas.util.enums.vagas.Formato;
 import br.com.ifpe.conecta_vagas.util.enums.vagas.TipoContrato;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -43,6 +44,8 @@ public class VagasRequest {
     @Max(value = 999, message = "O campo cargaHoraria pode ter no máximo {value}.")
     private Integer cargaHoraria;
 
+    private Formato formato;
+
     public Vagas build(){
         return Vagas.builder()
                     .ativa(ativa)
@@ -53,6 +56,7 @@ public class VagasRequest {
                     .salario(salario)
                     .titulo(titulo)
                     .requisitos(requisitos)
+                    .formato(formato)
                     .build();
     }
 }

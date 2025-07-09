@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.ifpe.conecta_vagas.modelo.candidatura.Candidatura;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
+import br.com.ifpe.conecta_vagas.util.enums.vagas.Formato;
 import br.com.ifpe.conecta_vagas.util.enums.vagas.TipoContrato;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,6 +56,10 @@ public class Vagas extends EntidadeAuditavel {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoContrato tipoContrato;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private Formato formato;
 
     @Column(nullable = true, length = 999)
     private Integer cargaHoraria;
