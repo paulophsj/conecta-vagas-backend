@@ -2,8 +2,6 @@ package br.com.ifpe.conecta_vagas.modelo.candidatura;
 
 import org.hibernate.annotations.SQLRestriction;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import br.com.ifpe.conecta_vagas.modelo.candidato.Candidato;
 import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
 import br.com.ifpe.conecta_vagas.util.entity.EntidadeAuditavel;
@@ -26,7 +24,6 @@ import lombok.Setter;
 public class Candidatura extends EntidadeAuditavel{
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private Candidato candidato;
 
     @ManyToOne

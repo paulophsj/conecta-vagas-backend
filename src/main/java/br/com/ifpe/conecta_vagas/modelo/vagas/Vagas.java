@@ -31,6 +31,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class Vagas extends EntidadeAuditavel {
+    @Column(nullable = false)
+    private String nomeEmpresa;
+    
     @ManyToOne
     @JsonIgnore
     private Recrutador recrutador;

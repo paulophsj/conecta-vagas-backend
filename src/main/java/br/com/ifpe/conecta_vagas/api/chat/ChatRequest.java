@@ -13,5 +13,4 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChatRequest {
     private Long idCandidato;
-    private Long idRecrutador;
 }

@@ -20,6 +20,12 @@ public class CandidaturaService {
     @Autowired
     private CandidatoService candidatoService;
 
+
+    public List<Candidatura> findByVaga(Long idVaga){
+        Vagas vagas = vagasService.findOne(idVaga);
+        return candidaturaRepository.findByVagas(vagas);
+    }
+
     public boolean existsByCandidatoAndVagas(Long idVaga, Long idCandidato){
         Candidato candidato = candidatoService.findOne(idCandidato);
         Vagas vagas = vagasService.findOne(idVaga);

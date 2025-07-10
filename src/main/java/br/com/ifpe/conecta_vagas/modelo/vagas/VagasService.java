@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.RecrutadorService;
+import br.com.ifpe.conecta_vagas.util.exceptions.VagaException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -18,7 +19,8 @@ public class VagasService {
     private RecrutadorService recrutadorService;
 
     public Vagas findOne(Long id){
-        return this.vagasRepository.findById(id).get();
+        Vagas vaga = this.vagasRepository.findById(id).orElseThrow(() -> new VagaException(VagaException.VAGA_NAO_ENCONTRADA));
+        return vaga;
     }
 
     //Obter todas as vagas do banco de dados

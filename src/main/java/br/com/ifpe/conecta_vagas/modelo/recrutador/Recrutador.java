@@ -34,6 +34,7 @@ import lombok.Setter;
 @Builder
 public class Recrutador extends EntidadeAuditavel {
     @OneToMany
+    @JsonIgnore
     private List<Vagas> vagas;
 
     @OneToOne

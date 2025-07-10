@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.conecta_vagas.modelo.candidato.CandidatoService;
 import br.com.ifpe.conecta_vagas.modelo.candidatura.Candidatura;
 import br.com.ifpe.conecta_vagas.modelo.candidatura.CandidaturaService;
+import br.com.ifpe.conecta_vagas.modelo.recrutador.RecrutadorService;
+import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
+import br.com.ifpe.conecta_vagas.modelo.vagas.VagasService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +29,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/api/candidatura")
 public class CandidaturaController {
     @Autowired
+    private RecrutadorService recrutadorService;
+    @Autowired
     private CandidaturaService candidaturaService;
     @Autowired
     private CandidatoService candidatoService;
+    @Autowired
+    private VagasService vagasService;
+
+    @GetMapping("/recrutador/{id}")
+    public ResponseEntity<?> findCandidaturaByVaga(@PathVariable("id") Long idVaga,
+            HttpServletRequest request) {
+        Vagas vagas = vagasService.findOne(idVaga);
+        boolean vagaPossuiRecrutador = vagas.getRecrutador().equals(recrutadorService.obterRecrutadorLogado(request));
+
+        if (!vagaPossuiRecrutador) {
+            Map<String, Object> erro = new HashMap<>();
+            erro.put("message", "não tem permissão para acessar essa vaga.");
+
+            return new ResponseEntity<Map<String, Object>>(erro, HttpStatus.UNAUTHORIZED);
+        }
+
+        List<Candidatura> candidatura = candidaturaService.findByVaga(idVaga);
+        return new ResponseEntity<List<Candidatura>>(candidatura, HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<Candidatura>> findAllByCandidato(HttpServletRequest request) {
@@ -39,7 +63,8 @@ public class CandidaturaController {
 
     @PostMapping("/{id}")
     public ResponseEntity<?> save(@PathVariable("id") Long idVaga, HttpServletRequest request) {
-        boolean candidatoPosuiVaga = candidaturaService.existsByCandidatoAndVagas(idVaga, candidatoService.obterCandidatoLogado(request).getId());
+        boolean candidatoPosuiVaga = candidaturaService.existsByCandidatoAndVagas(idVaga,
+                candidatoService.obterCandidatoLogado(request).getId());
         if (candidatoPosuiVaga) {
             Map<String, Object> erro = new HashMap<>();
             erro.put("message", "Você está cadastrado nessa vaga");
@@ -53,7 +78,8 @@ public class CandidaturaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long idVaga, HttpServletRequest request) {
-        boolean candidatoPosuiVaga = candidaturaService.existsByCandidatoAndVagas(idVaga, candidatoService.obterCandidatoLogado(request).getId());
+        boolean candidatoPosuiVaga = candidaturaService.existsByCandidatoAndVagas(idVaga,
+                candidatoService.obterCandidatoLogado(request).getId());
         if (!candidatoPosuiVaga) {
             Map<String, Object> erro = new HashMap<>();
             erro.put("message", "Você não possui uma vaga com esse id");

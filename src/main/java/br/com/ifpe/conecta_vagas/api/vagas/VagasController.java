@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.RecrutadorService;
 import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
 import br.com.ifpe.conecta_vagas.modelo.vagas.VagasService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @CrossOrigin
@@ -39,6 +41,13 @@ public class VagasController {
         return new ResponseEntity<List<Vagas>>(todasVagas, HttpStatus.OK);
     }
 
+    @GetMapping("/recrutador")
+    public ResponseEntity<List<Vagas>> findAllByRecrutador(HttpServletRequest request) {
+        List<Vagas> vagas = this.vagasService.findAllVagasByRecrutador(recrutadorService.obterRecrutadorLogado(request).getId());
+        return new ResponseEntity<List<Vagas>>(vagas, HttpStatus.OK);
+    }
+    
+
     @GetMapping("/{id}") // Uma única vaga
     public ResponseEntity<Vagas> findOne(@PathVariable("id") Long id) {
         Vagas vaga = this.vagasService.findOne(id);
@@ -47,7 +56,10 @@ public class VagasController {
 
     @PostMapping
     public ResponseEntity<Vagas> save(@RequestBody @Valid VagasRequest vagasRequest, HttpServletRequest request) {
-        Vagas vaga = this.vagasService.save(recrutadorService.obterRecrutadorLogado(request).getId(),
+        Recrutador recrutador = recrutadorService.obterRecrutadorLogado(request);
+        vagasRequest.setNomeEmpresa(recrutador.getNomeEmpresa());
+
+        Vagas vaga = this.vagasService.save(recrutador.getId(),
                 vagasRequest.build());
         return new ResponseEntity<Vagas>(vaga, HttpStatus.OK);
     }

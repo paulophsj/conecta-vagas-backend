@@ -1,5 +1,7 @@
 package br.com.ifpe.conecta_vagas.api.chat;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import br.com.ifpe.conecta_vagas.modelo.chat.Chat;
 import br.com.ifpe.conecta_vagas.modelo.chat.ChatService;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.RecrutadorService;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,10 +36,22 @@ public class ChatController {
     @Autowired
     private RecrutadorService recrutadorService;
 
+    @GetMapping("/recrutador")
+    public ResponseEntity<List<Chat>> findAllByRecrutador(HttpServletRequest request) {
+        List<Chat> chat = this.chatService.findAllByRecrutador(recrutadorService.obterRecrutadorLogado(request));
+        return new ResponseEntity<List<Chat>>(chat, HttpStatus.OK);
+    }
+
+    @GetMapping("/candidato")
+    public ResponseEntity<List<Chat>> findAllByCandidato(HttpServletRequest request) {
+        List<Chat> chat = this.chatService.findAllByCandidato(candidatoService.obterCandidatoLogado(request));
+        return new ResponseEntity<List<Chat>>(chat, HttpStatus.OK);
+    }
+
     @PostMapping
-    public ResponseEntity<Chat> save(@RequestBody ChatRequest request) {
+    public ResponseEntity<Chat> save(@RequestBody ChatRequest request, HttpServletRequest requestRecrutador) {
         Candidato candidato = this.candidatoService.findOne(request.getIdCandidato());
-        Recrutador recrutador = this.recrutadorService.findOne(request.getIdRecrutador());
+        Recrutador recrutador = this.recrutadorService.findOne(recrutadorService.obterRecrutadorLogado(requestRecrutador).getId());
 
         Chat novoChat = this.chatService.save(candidato, recrutador);
         return new ResponseEntity<Chat>(novoChat, HttpStatus.OK);

@@ -17,4 +17,6 @@ public interface CandidaturaRepository extends JpaRepository<Candidatura, Long>{
     Candidatura findByIdCandidatoAndIdVaga(Long idCandidato, Long idVaga);
 
     boolean existsByCandidatoAndVagas(Candidato candidato, Vagas vagas);
+
+    List<Candidatura> findByVagas(Vagas vagas);
 }

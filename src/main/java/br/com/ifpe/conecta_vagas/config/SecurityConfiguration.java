@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.GET, "/api/candidato").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/recrutador").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/ws/**").permitAll()
 
                                                 // Vagas
                                                 .requestMatchers(HttpMethod.GET, "/api/vagas/*").permitAll()
@@ -56,6 +57,8 @@ public class SecurityConfiguration {
                                                                 Perfil.ROLE_RECRUTADOR)
 
                                                 .requestMatchers(HttpMethod.DELETE, "/api/vagas/*").hasAnyAuthority(
+                                                                Perfil.ROLE_RECRUTADOR)
+                                                .requestMatchers(HttpMethod.GET, "/api/vagas/recrutador").hasAnyAuthority(
                                                                 Perfil.ROLE_RECRUTADOR)
                                                 .requestMatchers(HttpMethod.GET, "/api/recrutador/vagas/*").permitAll() // Obter
                                                                                                                         // todas
@@ -70,9 +73,22 @@ public class SecurityConfiguration {
                                                                 Perfil.ROLE_CANDIDATO,
                                                                 Perfil.ROLE_RECRUTADOR)
 
+                                                .requestMatchers(HttpMethod.GET, "/api/chat/recrutador").hasAnyAuthority(
+                                                                Perfil.ROLE_RECRUTADOR)
+
+                                                .requestMatchers(HttpMethod.GET, "/api/chat/candidato").hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO)
+
                                                 .requestMatchers(HttpMethod.GET, "/api/chat/*").hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO,
                                                                 Perfil.ROLE_RECRUTADOR)
+                                                .requestMatchers(HttpMethod.GET, "/api/chat/mensagem*").hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO,
+                                                                Perfil.ROLE_RECRUTADOR)
+                                                .requestMatchers(HttpMethod.POST, "/api/mensagem").hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO,
+                                                                Perfil.ROLE_RECRUTADOR)
+
 
                                                 // Candidato
                                                 .requestMatchers(HttpMethod.GET, "/api/candidato").hasAnyAuthority(
@@ -138,6 +154,9 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.DELETE, "/api/candidatura/*")
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
+                                                                .requestMatchers(HttpMethod.DELETE, "/api/candidatura/recrutador/*")
+                                                .hasAnyAuthority(
+                                                                Perfil.ROLE_RECRUTADOR)
 
                                                 .anyRequest().authenticated()
 

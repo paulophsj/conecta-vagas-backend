@@ -41,6 +41,6 @@ public class WebSocketMensagemController {
         Mensagem mensagemSalva = this.mensagemService.save(novaMensagem);
 
         // Notifica todos que estão escutando o canal
-        messagingTemplate.convertAndSend("/chat/" + message.getIdChat(), mensagemSalva);
+        messagingTemplate.convertAndSend("/chat/mensagem/" + message.getIdChat(), mensagemSalva);
     }
 }
