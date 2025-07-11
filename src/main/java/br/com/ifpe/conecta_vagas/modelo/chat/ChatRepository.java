@@ -13,5 +13,4 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findByRecrutador(Recrutador recrutador);
     
     List<Chat> findByCandidato(Candidato candidato);
-    
 }
