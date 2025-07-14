@@ -2,6 +2,8 @@ package br.com.ifpe.conecta_vagas.modelo.vagas;
 
 import java.util.List;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.ifpe.conecta_vagas.modelo.candidatura.Candidatura;
@@ -25,6 +27,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "vagas")
+@SQLRestriction("habilitado = true")
 @Getter
 @Setter
 @AllArgsConstructor

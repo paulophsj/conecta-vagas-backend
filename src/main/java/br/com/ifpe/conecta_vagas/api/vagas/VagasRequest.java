@@ -21,8 +21,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VagasRequest {
-    private String nomeEmpresa;
-    
     @NotBlank(message = "O campo título não pode ser nulo ou vazio")
     private String titulo;
 
@@ -58,7 +56,6 @@ public class VagasRequest {
                     .titulo(titulo)
                     .requisitos(requisitos)
                     .formato(formato)
-                    .nomeEmpresa(nomeEmpresa)
                     .build();
     }
 }

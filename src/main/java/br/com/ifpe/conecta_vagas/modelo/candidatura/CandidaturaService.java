@@ -58,4 +58,11 @@ public class CandidaturaService {
         candidatura.setHabilitado(Boolean.FALSE);
         candidaturaRepository.save(candidatura);
     }
+
+    @Transactional
+    public void excluirTodasCandidaturasPeloCandidato(Long idCandidato){
+        List<Candidatura> candidaturas = this.findByCandidato(idCandidato);
+        candidaturas.forEach(c -> c.setHabilitado(Boolean.FALSE));
+        candidaturaRepository.saveAll(candidaturas);
+    }
 }

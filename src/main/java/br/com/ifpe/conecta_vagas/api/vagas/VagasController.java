@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.conecta_vagas.modelo.candidatura.CandidaturaService;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.Recrutador;
 import br.com.ifpe.conecta_vagas.modelo.recrutador.RecrutadorService;
 import br.com.ifpe.conecta_vagas.modelo.vagas.Vagas;
@@ -34,6 +35,8 @@ public class VagasController {
     private VagasService vagasService;
     @Autowired
     private RecrutadorService recrutadorService;
+    @Autowired
+    private CandidaturaService candidaturaService;
 
     @GetMapping
     public ResponseEntity<List<Vagas>> findAll(){
@@ -57,10 +60,11 @@ public class VagasController {
     @PostMapping
     public ResponseEntity<Vagas> save(@RequestBody @Valid VagasRequest vagasRequest, HttpServletRequest request) {
         Recrutador recrutador = recrutadorService.obterRecrutadorLogado(request);
-        vagasRequest.setNomeEmpresa(recrutador.getNomeEmpresa());
 
-        Vagas vaga = this.vagasService.save(recrutador.getId(),
-                vagasRequest.build());
+        Vagas vagaBuild = vagasRequest.build();
+        vagaBuild.setNomeEmpresa(recrutador.getNomeEmpresa());
+
+        Vagas vaga = this.vagasService.save(recrutador.getId(), vagaBuild);
         return new ResponseEntity<Vagas>(vaga, HttpStatus.OK);
     }
 
@@ -74,20 +78,32 @@ public class VagasController {
             error.put("message", "Você não tem permissão para alterar essa vaga");
             return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
         }
+
+        Recrutador recrutador = recrutadorService.obterRecrutadorLogado(request);
+
+        Vagas vagaBuild = vagasRequest.build();
+        vagaBuild.setNomeEmpresa(recrutador.getNomeEmpresa());
+        
         Vagas vaga = this.vagasService.update(id, vagasRequest.build());
         return new ResponseEntity<Vagas>(vaga, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable("id") Long id, HttpServletRequest request) {
-        boolean recrutadorPossuiVaga = recrutadorService.obterRecrutadorLogado(request).getVagas().stream()
+        Recrutador recrutador = recrutadorService.obterRecrutadorLogado(request);
+
+        boolean recrutadorPossuiVaga = recrutador.getVagas().stream()
                 .anyMatch(vaga -> vaga.getId().equals(id));
+                
         if (!recrutadorPossuiVaga) {
             Map<String, Object> error = new HashMap<>();
             error.put("message", "Você não tem permissão para alterar essa vaga");
             return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
         }
         this.vagasService.remove(id);
+
+        candidaturaService.excluirTodasCandidaturasPeloCandidato(recrutador.getId());
+
         return ResponseEntity.ok().build();
     }
 }
