@@ -46,6 +46,13 @@ public class CandidatoService {
 
     @Transactional
     public Candidato save(Candidato candidato) {
+        if(candidatoRepository.existsByCpf(candidato.getCpf())){
+            throw new CandidatoException(CandidatoException.CPF_REPETIDO);
+        }
+        if(candidatoRepository.existsByNumeroTelefone(candidato.getNumeroTelefone())){
+            throw new CandidatoException(CandidatoException.TELEFONE_REPETIDO);
+        }
+
         if (candidato.getNome().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "nome");
 
@@ -63,18 +70,8 @@ public class CandidatoService {
 
     @Transactional
     public Candidato update(Long id, Candidato novoCandidato) {
-        if (novoCandidato.getNome().matches(".*\\d.*")) {
-            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "nome");
-
-        }
         Candidato antigoCandidato = this.findOne(id);
 
-        Usuario antigoUsuario = antigoCandidato.getUsuario();
-
-        antigoUsuario.setPassword(novoCandidato.getUsuario().getPassword());
-        antigoUsuario.setUsername(novoCandidato.getUsuario().getUsername());
-        
-        Usuario novoUsuario = usuarioService.save(antigoUsuario);
 
         antigoCandidato.setCargoPretendido(novoCandidato.getCargoPretendido());
         antigoCandidato.setCpf(novoCandidato.getCpf());
@@ -83,7 +80,8 @@ public class CandidatoService {
         antigoCandidato.setPretensaoSalarial(novoCandidato.getPretensaoSalarial());
         antigoCandidato.setResumoProfissional(novoCandidato.getResumoProfissional());
         antigoCandidato.setNumeroTelefone(novoCandidato.getNumeroTelefone());
-        antigoCandidato.setUsuario(novoUsuario);
+
+        antigoCandidato.setUsuario(antigoCandidato.getUsuario());
 
         return candidatoRepository.save(antigoCandidato);
     }

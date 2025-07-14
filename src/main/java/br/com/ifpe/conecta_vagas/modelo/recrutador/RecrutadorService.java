@@ -64,8 +64,6 @@ public class RecrutadorService {
 
         antigoRecrutador.setCnpj(novoRecrutador.getCnpj());
         antigoRecrutador.setNomeEmpresa(novoRecrutador.getNomeEmpresa());
-        antigoRecrutador.getUsuario().setPassword(novoRecrutador.getUsuario().getPassword());
-        antigoRecrutador.getUsuario().setUsername(novoRecrutador.getUsuario().getUsername());
         antigoRecrutador.setNumeroTelefone(novoRecrutador.getNumeroTelefone());
         antigoRecrutador.setEstado(novoRecrutador.getEstado());
         antigoRecrutador.setCidade(novoRecrutador.getCidade());
@@ -74,6 +72,10 @@ public class RecrutadorService {
         antigoRecrutador.setPorteEmpresa(novoRecrutador.getPorteEmpresa());
         antigoRecrutador.setNumeroFuncionarios(novoRecrutador.getNumeroFuncionarios());
         antigoRecrutador.setSetorEmpresa(novoRecrutador.getSetorEmpresa());
+
+        antigoRecrutador.setUsuario(antigoRecrutador.getUsuario());
+
+        antigoRecrutador.getVagas().forEach(vaga -> vaga.setNomeEmpresa(novoRecrutador.getNomeEmpresa()));
 
         return recrutadorRepository.save(antigoRecrutador);
     }

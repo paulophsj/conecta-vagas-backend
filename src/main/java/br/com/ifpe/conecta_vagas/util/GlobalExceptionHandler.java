@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.com.ifpe.conecta_vagas.util.exceptions.CandidatoException;
 import br.com.ifpe.conecta_vagas.util.exceptions.ChatException;
 import br.com.ifpe.conecta_vagas.util.exceptions.VagaException;
 
@@ -24,6 +25,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object>  handleChatException(ChatException ex){
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "message", ex.getMessage(),
+                        "status", HttpStatus.CONFLICT.value()
+                ));
+    }
+    @ExceptionHandler(CandidatoException.class)
+    public ResponseEntity<Object>  handleCandidatoException(CandidatoException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
                         "message", ex.getMessage(),
                         "status", HttpStatus.CONFLICT.value()

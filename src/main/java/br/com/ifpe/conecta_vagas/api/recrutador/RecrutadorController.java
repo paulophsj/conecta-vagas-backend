@@ -41,7 +41,7 @@ public class RecrutadorController {
     }
 
     @PutMapping
-    public ResponseEntity<Recrutador> update(@RequestBody @Valid RecrutadorRequest recrutadorRequest, HttpServletRequest request) {
+    public ResponseEntity<Recrutador> update(@RequestBody @Valid RecrutadorUpdateRequest recrutadorRequest, HttpServletRequest request) {
         Recrutador novoRecrutador = this.recrutadorService.update(recrutadorService.obterRecrutadorLogado(request).getId(), recrutadorRequest.build());
         return new ResponseEntity<Recrutador>(novoRecrutador, HttpStatus.OK);
     }

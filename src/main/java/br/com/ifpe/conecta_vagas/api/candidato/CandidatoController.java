@@ -47,7 +47,7 @@ public class CandidatoController {
     }
 
     @PutMapping
-    public ResponseEntity<Candidato> update(@RequestBody @Valid CandidatoRequest candidatoRequest, HttpServletRequest request) {
+    public ResponseEntity<Candidato> update(@RequestBody @Valid CandidatoUpdateRequest candidatoRequest, HttpServletRequest request) {
         Candidato candidato = this.candidatoService.update(candidatoService.obterCandidatoLogado(request).getId(), candidatoRequest.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
