@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/candidato")
@@ -68,6 +69,25 @@ public class CandidatoController {
     /*
      * Controller > Endereco_Candidato
      */
+    @GetMapping("/endereco/{id}")
+    public ResponseEntity<?> getOneEndereco(@PathVariable("id") Long id, HttpServletRequest request) {
+        Candidato candidato = candidatoService.obterCandidatoLogado(request);
+
+        List<EnderecoCandidato> allEnderecos = candidatoService.findAllEndereco(candidato.getId());
+
+        boolean existsEndereco = allEnderecos.stream().anyMatch(endereco -> endereco.getCandidato().equals(candidato));
+
+        if(!existsEndereco){
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar este candidato");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
+
+        EnderecoCandidato enderecoCandidato = candidatoService.findOneEndereco(id);
+
+        return new ResponseEntity<EnderecoCandidato>(enderecoCandidato, HttpStatus.OK);
+    }
+    
     @GetMapping("/endereco")
     public ResponseEntity<List<EnderecoCandidato>> getEndereco(HttpServletRequest request) {
         List<EnderecoCandidato> enderecoCandidato = this.candidatoService

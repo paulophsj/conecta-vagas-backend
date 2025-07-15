@@ -32,7 +32,6 @@ public class CandidatoService {
     @Autowired
     private JwtService jwtService;
 
-
     @Autowired
     private PerfilRepository perfilUsuarioRepository;
 
@@ -95,6 +94,9 @@ public class CandidatoService {
     /*
      * Services para relação Candidato > EnderecoCandidato
      */
+    public EnderecoCandidato findOneEndereco(Long id){
+        return enderecoCandidatoRepository.findById(id).orElseThrow(() -> new CandidatoException(CandidatoException.ENDERECO_NAO_ENCONTRADO));
+    }
     public List<EnderecoCandidato> findAllEndereco(Long id) {
         List<EnderecoCandidato> allEnderecos = this.enderecoCandidatoRepository.findAllByIdCandidato(id);
         return allEnderecos;
@@ -109,22 +111,6 @@ public class CandidatoService {
 
     @Transactional
     public EnderecoCandidato updateEndereco(Long id, EnderecoCandidato novoEnderecoCandidato) {
-        if (!novoEnderecoCandidato.getEnderecoCep().matches("^\\d{5}-\\d{3}$")) {
-            throw new CandidatoException(CandidatoException.FORMATO_CEP);
-        }
-        if (novoEnderecoCandidato.getEnderecoBairro().matches(".*\\d.*")) {
-            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "bairro");
-        }
-        if (novoEnderecoCandidato.getEnderecoCidade().matches(".*\\d.*")) {
-            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "cidade");
-        }
-        if (novoEnderecoCandidato.getEnderecoEstado().matches(".*\\d.*")) {
-            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "estado");
-        }
-        if (novoEnderecoCandidato.getEnderecoRua().matches(".*\\d.*")) {
-            throw new CandidatoException(CandidatoException.APENAS_LETRAS, "logradouro");
-        }
-
         EnderecoCandidato endereco = this.enderecoCandidatoRepository.findById(id).get();
 
         endereco.setEnderecoBairro(novoEnderecoCandidato.getEnderecoBairro());

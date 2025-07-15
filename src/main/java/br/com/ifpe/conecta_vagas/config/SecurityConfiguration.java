@@ -104,6 +104,10 @@ public class SecurityConfiguration {
                                                                 Perfil.ROLE_CANDIDATO)
 
                                                 // Candidato > Endereco
+                                                .requestMatchers(HttpMethod.GET, "/api/candidato/endereco/*")
+                                                .hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO)
+
                                                 .requestMatchers(HttpMethod.PUT, "/api/candidato/endereco/*")
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
@@ -173,7 +177,7 @@ public class SecurityConfiguration {
 
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                configuration.setAllowedOrigins(Arrays.asList("http://10.221.211.67:3000", "http://localhost:3000"));
+                configuration.setAllowedOrigins(Arrays.asList("http://192.168.1.40:3000", "http://localhost:3000"));
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                 configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
                 configuration.setAllowCredentials(true);
