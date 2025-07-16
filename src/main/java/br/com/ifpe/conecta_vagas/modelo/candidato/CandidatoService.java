@@ -165,6 +165,9 @@ public class CandidatoService {
     /*
      * Services para relação Candidato > FormacaoAcademica
      */
+    public FormacaoAcademica findOneFormacao(Long id){
+        return formacaoAcademicaRepository.findById(id).orElseThrow(() -> new CandidatoException(CandidatoException.FORMACAO_NAO_ENCONTRADA));
+    }
     public List<FormacaoAcademica> findAllFormacao(Long id) {
         List<FormacaoAcademica> allFormacao = this.formacaoAcademicaRepository.findAllByIdCandidato(id);
         return allFormacao;
@@ -191,6 +194,7 @@ public class CandidatoService {
         formacaoExistente.setInstituicao(novaFormacaoAcademica.getInstituicao());
         formacaoExistente.setCurso(novaFormacaoAcademica.getCurso());
         formacaoExistente.setAnoConclusao(novaFormacaoAcademica.getAnoConclusao());
+        formacaoExistente.setNivelAcademico(novaFormacaoAcademica.getNivelAcademico());
 
         return this.formacaoAcademicaRepository.save(formacaoExistente);
     }

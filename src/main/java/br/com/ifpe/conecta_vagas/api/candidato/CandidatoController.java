@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api/candidato")
@@ -48,8 +47,10 @@ public class CandidatoController {
     }
 
     @PutMapping
-    public ResponseEntity<Candidato> update(@RequestBody @Valid CandidatoUpdateRequest candidatoRequest, HttpServletRequest request) {
-        Candidato candidato = this.candidatoService.update(candidatoService.obterCandidatoLogado(request).getId(), candidatoRequest.build());
+    public ResponseEntity<Candidato> update(@RequestBody @Valid CandidatoUpdateRequest candidatoRequest,
+            HttpServletRequest request) {
+        Candidato candidato = this.candidatoService.update(candidatoService.obterCandidatoLogado(request).getId(),
+                candidatoRequest.build());
         return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
     }
 
@@ -75,11 +76,11 @@ public class CandidatoController {
 
         List<EnderecoCandidato> allEnderecos = candidatoService.findAllEndereco(candidato.getId());
 
-        boolean existsEndereco = allEnderecos.stream().anyMatch(endereco -> endereco.getCandidato().equals(candidato));
+        boolean existsEndereco = allEnderecos.stream().anyMatch(endereco -> endereco.getId().equals(id));
 
-        if(!existsEndereco){
+        if (!existsEndereco) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Você não tem permissão para alterar este candidato");
+            error.put("message", "Você não tem permissão para alterar este endereço");
             return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
         }
 
@@ -87,7 +88,7 @@ public class CandidatoController {
 
         return new ResponseEntity<EnderecoCandidato>(enderecoCandidato, HttpStatus.OK);
     }
-    
+
     @GetMapping("/endereco")
     public ResponseEntity<List<EnderecoCandidato>> getEndereco(HttpServletRequest request) {
         List<EnderecoCandidato> enderecoCandidato = this.candidatoService
@@ -137,6 +138,25 @@ public class CandidatoController {
     /*
      * Controller > Formacao_Candidato
      */
+    @GetMapping("/formacao/{id}")
+    public ResponseEntity<?> getOneFormacao(@PathVariable("id") Long id, HttpServletRequest request) {
+        Candidato candidato = candidatoService.obterCandidatoLogado(request);
+
+        List<FormacaoAcademica> allFormacaoAcademicas = candidatoService.findAllFormacao(candidato.getId());
+
+        boolean existsEndereco = allFormacaoAcademicas.stream().anyMatch(formacao -> formacao.getId().equals(id));
+
+        if (!existsEndereco) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Você não tem permissão para alterar esta formação");
+            return new ResponseEntity<Map<String, Object>>(error, HttpStatus.UNAUTHORIZED);
+        }
+
+        FormacaoAcademica formacaoAcademica = candidatoService.findOneFormacao(id);
+
+        return new ResponseEntity<FormacaoAcademica>(formacaoAcademica, HttpStatus.OK);
+    }
+
     @GetMapping("/formacao")
     public ResponseEntity<List<FormacaoAcademica>> getFormacao(HttpServletRequest request) {
         List<FormacaoAcademica> formacaoAcademicas = this.candidatoService

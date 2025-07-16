@@ -141,6 +141,10 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority(
                                                                 Perfil.ROLE_CANDIDATO)
 
+                                                .requestMatchers(HttpMethod.GET, "/api/candidato/formacao/*")
+                                                .hasAnyAuthority(
+                                                                Perfil.ROLE_CANDIDATO)
+
                                                 // Recrutador
                                                 .requestMatchers(HttpMethod.PUT, "/api/recrutador/*")
                                                 .hasAnyAuthority(
