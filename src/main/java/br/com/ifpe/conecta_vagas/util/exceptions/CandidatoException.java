@@ -8,6 +8,7 @@ public class CandidatoException extends RuntimeException {
 
     public static final String CPF_REPETIDO = "Já existe um CPF cadastrado.";
     public static final String TELEFONE_REPETIDO = "Já existe um telefone cadastrado";
+    public static final String EMAIL_REPETIDO = "Já existe um email cadastrado";
 
     public static final String ENDERECO_NAO_ENCONTRADO = "Endereço não localizado";
     public static final String FORMACAO_NAO_ENCONTRADA = "Formação acadêmica não localizada";

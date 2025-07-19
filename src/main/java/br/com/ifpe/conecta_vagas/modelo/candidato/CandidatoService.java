@@ -51,6 +51,9 @@ public class CandidatoService {
         if(candidatoRepository.existsByNumeroTelefone(candidato.getNumeroTelefone())){
             throw new CandidatoException(CandidatoException.TELEFONE_REPETIDO);
         }
+        if(candidatoRepository.existsByUsuario_Username(candidato.getUsuario().getUsername())){
+            throw new CandidatoException(CandidatoException.EMAIL_REPETIDO);
+        }
 
         if (candidato.getNome().matches(".*\\d.*")) {
             throw new CandidatoException(CandidatoException.APENAS_LETRAS, "nome");
